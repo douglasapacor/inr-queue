@@ -9,7 +9,6 @@ if (process.env.NODE_ENV === "production") {
 } else {
   if (!global.databaseClient) {
     global.databaseClient = new PrismaClient({
-      // log: ["info", "warn", "error"],
       log: ["query", "info", "warn", "error"]
     })
   }

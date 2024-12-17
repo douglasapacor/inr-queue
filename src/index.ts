@@ -7,6 +7,7 @@ import application from "./config/application"
 import router from "./router"
 const app = express()
 const httpServer = http.createServer(app)
+
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
