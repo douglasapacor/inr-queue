@@ -1,48 +1,48 @@
-import { createTask } from "../types"
-import databaseClient from "../../lib/dbClient/databaseClient"
+import { Repository } from "../types"
 
-export default class TaskRepository {
-  public async saveTask(task: createTask): Promise<{
-    id: number
+export default class TaskRepository extends Repository {
+  public async saveTask(params: {
     taskName: string
-    payload?: string | null
-    priority: number
     retries: number
+    priority: number
     maxRetries: number
-    createdAt: Date
+  }): Promise<{
+    add_task: number
   }> {
     try {
-      return await databaseClient.task.create({
-        data: {
-          taskName: task.taskName,
-          retries: task.retries,
-          priority: task.priority,
-          payload: task.payload,
-          maxRetries: task.maxRetries,
-          createdAt: new Date()
-        }
-      })
+      return await this.call<{ add_task: number }>(
+        "add_task",
+        params.taskName,
+        params.retries,
+        params.priority,
+        params.maxRetries
+      )
     } catch (error: any) {
       throw new Error(`TaskRepository -:${error.message}`)
     }
   }
 
-  public async completeTask(taskId: number): Promise<void> {
+  public async completeTask(params: { taskId: number }): Promise<{
+    complete_task: number
+  }> {
     try {
-      await databaseClient.task.delete({
-        where: { id: taskId }
-      })
+      return await this.call<{ complete_task: number }>(
+        "complete_task",
+        params.taskId
+      )
     } catch (error: any) {
       throw new Error(`TaskRepository -:${error.message}`)
     }
   }
 
-  public async incrementRetries(taskId: number): Promise<void> {
+  public async incrementRetries(params: {
+    taskId: number
+  }): Promise<{ increment_task: number }> {
     try {
-      await databaseClient.task.update({
-        where: { id: taskId },
-        data: { retries: { increment: 1 } }
-      })
+      return await this.call<{ increment_task: number }>(
+        "increment_task",
+        params.taskId
+      )
     } catch (error: any) {
       throw new Error(`TaskRepository -:${error.message}`)
     }

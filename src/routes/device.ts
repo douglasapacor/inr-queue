@@ -5,7 +5,6 @@ import { DeviceController } from "../cases/controllers/Device"
 import { DeviceService } from "../cases/services/Device"
 import { DeviceRepository } from "../cases/repositories/Device"
 const deviceRoute = express.Router()
-
 const repository = new DeviceRepository()
 const service = new DeviceService(repository)
 const controller = new DeviceController(service)
