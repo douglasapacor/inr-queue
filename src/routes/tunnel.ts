@@ -1,29 +1,24 @@
 import express, { Request, Response } from "express"
-import wrapper from "../lib/wrapper"
+import applicationTunnel from "../lib/applicationTunnel"
 import { defaultResponse } from "../cases/types"
-const taskRoute = express.Router()
+const tunnelRoute = express.Router()
 
-taskRoute.post(
+tunnelRoute.post(
   "/send-mail",
-  wrapper({
+  applicationTunnel({
     handle: async (req: Request, res: Response<defaultResponse>) => {
       res.status(200).json()
-    },
-    settings: {
-      level: "free"
-    }
-  })
-)
-taskRoute.post(
-  "/send-notification",
-  wrapper({
-    handle: async (req: Request, res: Response<defaultResponse>) => {
-      res.status(200).json()
-    },
-    settings: {
-      level: "free"
     }
   })
 )
 
-export default taskRoute
+tunnelRoute.post(
+  "/send-notification",
+  applicationTunnel({
+    handle: async (req: Request, res: Response<defaultResponse>) => {
+      res.status(200).json()
+    }
+  })
+)
+
+export default tunnelRoute

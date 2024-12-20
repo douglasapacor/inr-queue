@@ -10,7 +10,6 @@ datasource db {
 model Task {
     id         Int      @id @default(autoincrement())
     taskName   String   @db.VarChar(500)
-    payload    String?  @db.VarChar(500)
     priority   Int
     retries    Int
     maxRetries Int
@@ -19,8 +18,16 @@ model Task {
 
 model Keys {
     id     Int     @id @default(autoincrement())
-    pId    String  @db.VarChar(50)
     name   String  @db.VarChar(100)
-    active Boolean
     key    String  @db.VarChar(700)
+    active Boolean
+    pId    String  @db.VarChar(50)
+}
+
+model Devices {
+    id        Int      @id @default(autoincrement())
+    userId    String
+    token     String
+    platform  String
+    createdAt DateTime
 }

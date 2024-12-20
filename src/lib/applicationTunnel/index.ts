@@ -1,10 +1,9 @@
 import type { Request, Response } from "express"
 import { verify } from "jsonwebtoken"
-
 import application from "../../config/application"
 import { attributes } from "./types"
 
-export default function queueWrapper(attr: attributes) {
+export default function applicationTunnel(attr: attributes) {
   return async (req: Request, res: Response): Promise<void> => {
     try {
       res.on("finish", () => {

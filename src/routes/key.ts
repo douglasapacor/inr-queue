@@ -4,7 +4,6 @@ import KeyController from "../cases/controllers/Key"
 import KeyService from "../cases/services/Key"
 import KeyRepository from "../cases/repositories/Key"
 const keysRoute = express.Router()
-
 const repository = new KeyRepository()
 const service = new KeyService(repository)
 const controller = new KeyController(service)
