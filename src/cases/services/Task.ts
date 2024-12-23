@@ -14,14 +14,19 @@ export default class TaskService {
         taskName: params.taskName,
         retries: params.retries,
         maxRetries: params.maxRetries,
-        payload: JSON.stringify(params.payload),
         priority: params.priority
       })
 
       return {
         success: true,
-        data: taskResponse,
-        message: `Tarefa ${params.taskName} adicionada com sucesso.`
+        message: `Tarefa ${params.taskName} adicionada com sucesso.`,
+        data: {
+          id: taskResponse.add_task,
+          taskName: params.taskName,
+          priority: params.priority,
+          retries: params.retries,
+          maxRetries: params.maxRetries
+        }
       }
     } catch (error: any) {
       return {
@@ -35,9 +40,11 @@ export default class TaskService {
     params: taskIdServiceProps
   ): Promise<defaultResponse> {
     try {
-      await this.taskRepository.completeTask(params.id)
+      await this.taskRepository.completeTask({ taskId: params.id })
+
       return {
-        success: true
+        success: true,
+        message: "Tarefa concluida."
       }
     } catch (error: any) {
       return {
@@ -51,9 +58,11 @@ export default class TaskService {
     params: taskIdServiceProps
   ): Promise<defaultResponse> {
     try {
-      await this.taskRepository.incrementRetries(params.id)
+      await this.taskRepository.incrementRetries({ taskId: params.id })
+
       return {
-        success: true
+        success: true,
+        message: "Tarefa incrementada."
       }
     } catch (error: any) {
       return {

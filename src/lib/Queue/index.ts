@@ -1,6 +1,6 @@
 import TaskController from "../../cases/controllers/Task"
-import { Task } from "../../cases/types"
 import * as tasklist from "../../tasks"
+import { Task } from "./types"
 
 export default class Queue {
   private tasks: Task[] = []
@@ -19,7 +19,6 @@ export default class Queue {
 
       const savedTask = await this.controller.create({
         taskName: taskData.name,
-        payload: payload,
         retries: taskData.retries,
         priority: taskData.priority,
         maxRetries: taskData.maxRetries
@@ -28,8 +27,17 @@ export default class Queue {
       if (!savedTask.success)
         throw new Error(`Erro ao registrar tarefa: ${name}`)
 
-      this.tasks.push(savedTask.data)
+      this.tasks.push({
+        id: savedTask.data.id,
+        name: savedTask.data.taskName,
+        priority: savedTask.data.priority,
+        maxRetries: savedTask.data.maxRetries,
+        retries: savedTask.data.retries,
+        payload: payload
+      })
+
       this.tasks.sort((a, b) => a.priority - b.priority)
+
       this.process()
     } catch (error: any) {
       throw new Error(error.message)
@@ -60,7 +68,7 @@ export default class Queue {
                 this.tasks.push(task)
               } else {
                 console.error(
-                  `Tarefa ${task.taskName} falhou após ${task.maxRetries} tentativas.`
+                  `Tarefa ${task.name} falhou após ${task.maxRetries} tentativas.`
                 )
               }
             })
@@ -76,7 +84,7 @@ export default class Queue {
   }
 
   private async execute(task: Task): Promise<void> {
-    await tasklist[task.taskName as keyof typeof tasklist].handle(task.payload)
+    await tasklist[task.name as keyof typeof tasklist].handle(task.payload)
   }
 
   public getSize(): number {

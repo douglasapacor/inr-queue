@@ -1,10 +1,10 @@
-import queue from "../../queue"
+import { trackingMailServiceProps } from "../schemas/trackingMail"
 import { defaultResponse } from "../types"
 
-export default class RegisterService {
-  async Add(params: { name: string; payload: any }): Promise<defaultResponse> {
+export default class TrackingService {
+  async mail(params: trackingMailServiceProps): Promise<defaultResponse> {
     try {
-      queue.add(params.name, params.payload)
+      console.log(params)
 
       return {
         success: true

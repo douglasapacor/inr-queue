@@ -1,16 +1,16 @@
 import express, { Request, Response } from "express"
-import wrapper from "../lib/wrapper"
+import applicationTunnel from "../lib/applicationTunnel"
 import { defaultResponse } from "../cases/types"
 import QueueController from "../cases/controllers/Queue"
 import QueueService from "../cases/services/QueueService"
-const taskRoute = express.Router()
+const tunnelRoute = express.Router()
 
 const service = new QueueService()
 const controller = new QueueController(service)
 
-taskRoute.post(
+tunnelRoute.post(
   "/send-mail",
-  wrapper({
+  applicationTunnel({
     handle: async (req: Request, res: Response<defaultResponse>) => {
       res.status(200).json(
         await controller.sendMail({
@@ -21,16 +21,13 @@ taskRoute.post(
           htmlContent: req.body.htmlContent
         })
       )
-    },
-    settings: {
-      level: "free"
     }
   })
 )
 
-taskRoute.post(
+tunnelRoute.post(
   "/send-notification",
-  wrapper({
+  applicationTunnel({
     handle: async (req: Request, res: Response<defaultResponse>) => {
       res.status(200).json(
         await controller.sendNotification({
@@ -42,11 +39,8 @@ taskRoute.post(
           token: req.body.token
         })
       )
-    },
-    settings: {
-      level: "free"
     }
   })
 )
 
-export default taskRoute
+export default tunnelRoute
