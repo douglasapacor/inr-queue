@@ -36,6 +36,7 @@
     "firebase-admin": "13.0.2",
     "jsonwebtoken": "9.0.2",
     "nodemailer": "6.9.16",
+    "socket.io": "^4.8.1",
     "tsup": "8.2.4",
     "tsx": "4.17.0",
     "zod": "3.23.8"

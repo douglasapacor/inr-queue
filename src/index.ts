@@ -5,6 +5,7 @@ import cors from "cors"
 import bodyParser from "body-parser"
 import application from "./config/application"
 import router from "./router"
+import SocketIO from "./lib/Socket"
 const app = express()
 const httpServer = http.createServer(app)
 
@@ -17,9 +18,14 @@ app.use((req, _, next) => {
     method: req.method,
     start: new Date().getMilliseconds()
   }
+
   next()
 })
+
 app.use(router)
+
+new SocketIO(httpServer)
+
 httpServer.listen(application.port, async () => {
   console.log(
     `Api "${application.name}" running on: ${application.host}:${application.port}`
